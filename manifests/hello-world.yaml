@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ibanmarco
+  labels:
+    name: ibanmarco
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hello-world
+  name: hello-world
+  namespace: ibanmarco
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: hello-world   
+        image: hello-world:v1
+        ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world
+  namespace: ibanmarco
+  labels:
+    app: hello-world    
+spec:
+  ports:
+  - name: http
+    port: 80
+  selector:
+    app: hello-world
+  type: LoadBalancer
